@@ -10,31 +10,54 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
----
-
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
-
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-```
-
-???
-
-Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
 
 ---
-class: center, middle
-
 # Who am I? (might move or drop this slide)
 
-# What this talk is (and isn't about)
+---
+# What this talk is (and isn't) about
+- Not (necessarily) about destined for Github/CRAN
+- Not about how to build packages/intro to `devtools` and `roxygen2` (but there 
+will be resources on that at the end)
+- It's about practices I've found useful in developing packages for personal 
+use or at work.
 
+---
 # How repeated code is like for loops (and therefore cupcakes)
+- [For those unfamiliar with the above reference](https://www.youtube.com/watch?v=GyNqlOjhPCQ)
 
+---
 # utils.R is your friend (internal functions)
+- Remember that not everything needs to be `@exported`-
+- moving chunks of code into a (well-named) internal function can make it easier
+to review and test your code
+- "Rule of three" applies to code within functions
+- makes it easy to update a common workflow or use a parameter to 'switch' 
+which workflow your using
 
+---
 # Using sensible defaults
+- Use defaults to hide repeated processes that you don't always want to run.
+- For me, this was driven home by a _very_ slow processing step I almost never 
+used.
+- often a simple TRUE/FALSE parameter is enough
 
+---
+# Case study in internal functions and defaults
+
+---
 # Additional resources
+- [RStudio's cheetsheet](https://github.com/rstudio/cheatsheets/blob/master/package-development.pdf)
+- [_R Packages_ by Hadley Wickham](http://r-pkgs.had.co.nz/)
+- [WIP 2<sup>nd</sup> edition with Jenny Bryan](https://r-pkgs.org/)
+- ["Writing an R package from scratch" by Hilary 
+Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
+- [Thomas Westlake's version of "Writing an R package from scratch" using 
+`usethis`](https://r-mageddon.netlify.com/post/writing-an-r-package-from-scratch/)
+- ["R Package Primer" by Karl Broman](https://kbroman.org/pkg_primer/)
+- ["`usethis` workflow for package development" by Emil 
+Hvitfedlt](https://www.hvitfeldt.me/blog/usethis-workflow-for-package-development/)
+- [The tidyverse style guide](https://style.tidyverse.org/)
 
+---
 # Thank you/questions
