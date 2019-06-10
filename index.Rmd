@@ -19,16 +19,29 @@ output:
 - Not (necessarily) about destined for Github/CRAN
 - Not about how to build packages/intro to `devtools` and `roxygen2` (but there 
 will be resources on that at the end)
-- It's about practices I've found useful in developing packages for personal 
-use or at work.
+- It's about practices I've found useful in developing packages for personal use 
+or at work.
+
+---
+# Why should I bother building a package if no one else is going to use it?
+- `devtools` and `usethis` provide tools for documenting what you were 
+thinking when you wrote the code and what your dependencies are
+- Future you will be grateful
+- Low-stress way to develop related skills
+- Good rule of thumb (that I can't find the source for): If you re-use the same 
+code three times, write a function. If you re-use the same function three times,
+write a package.
 
 ---
 # How repeated code is like for loops (and therefore cupcakes)
 - [For those unfamiliar with the above reference](https://www.youtube.com/watch?v=GyNqlOjhPCQ)
+- Repeating code obscures changes.
+- Repeating code leads to accidental changes.
+- Need to remember to manually propigate changes to all versions.
 
 ---
 # utils.R is your friend (internal functions)
-- Remember that not everything needs to be `@exported`-
+- Remember that not everything needs to be `@exported`-ed
 - moving chunks of code into a (well-named) internal function can make it easier
 to review and test your code
 - "Rule of three" applies to code within functions
