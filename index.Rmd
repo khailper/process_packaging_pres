@@ -12,7 +12,11 @@ output:
       countIncrementalSlides: false
 
 ---
-# Who am I? (might move or drop this slide)
+# Who am I?
+- Data science consultant
+- Have built R packages for a client to streamline data processing and 
+visualization
+- They/them
 
 ---
 # What this talk is (and isn't) about
