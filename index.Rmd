@@ -13,6 +13,10 @@ output:
 
 ---
 # Who am I?
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
 - Data science consultant
 - Have built R packages for a client to streamline data processing and 
 visualization
@@ -63,19 +67,39 @@ used.
 
 ---
 # Case study in internal functions and defaults
-- Starting point:
-```{r basic_pseudo_code, eval = FALSE}
+- Starting point was something like this:
+```{r basic_pseudo_code}
 # assorted documentation ommitted
 # usethis::use_pipe() allows us to use %>% 
 #' @export
-read_page_views = here::here("data", "page_views.csv") %>% 
+read_page_views <- function(){
+  here::here("data", "page_views.csv") %>% 
   readr::read_csv() %>% 
   # data comes in as UTC
-  dplyr::mutate(time = lubridate::with_tz(time, tz = "America/Chicago"))
+  dplyr::mutate(time = lubridate::with_tz(time, tz = "America/Chicago"),
+                # some non-standard characters in page names were coming out
+                # garbled, and needed to be replaced for use in plot labels
+                page_name = regex_stuff_to_handle_special_chars(page_name))
+}
 ```
 
 ---
-
+# But then we added bunch of other data sources...
+- Also, there's discussion of reading directly from AWS.
+- Now code looks more like `here::here("data", "web_data","page_views.csv")`.
+- So now `read_page_views()` looks more like this:
+```{read_data_file}
+#' @export
+read_page_views <- function(){
+  read_data_file(location = "web_data",
+                 file_name = "page_views.csv") %>% 
+  # data comes in as UTC
+  dplyr::mutate(time = lubridate::with_tz(time, tz = "America/Chicago"),
+                # some non-standard characters in page names were coming out
+                # garbled, and needed to be replaced for use in plot labels
+                page_name = regex_stuff_to_handle_special_chars(page_name))
+}
+```
 
 ---
 # Additional resources
