@@ -2,7 +2,7 @@
 title: "The Promise and Perils of Packaging Your Processes"
 subtitle: "(mostly promise)"
 author: "Karl Hailperin"
-date: "2016/12/12 (updated: `r Sys.Date()`)"
+date: "2018/06/18"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -141,6 +141,11 @@ read_data_file <- function(location, file_name){
   }
 }
 ```
+- Added bonus, we can give a default value for `location` parameters.
+- Went from `read_page_views <- function(location = "local"){# ...}` to
+`read_page_views <- function(location = "aws"){# ...}` when AWS 
+authorization system was ready.
+- Actual code still just uses `read_page_views()`.
 
 ---
 # Remember page_name = regex_stuff(page_name)?
