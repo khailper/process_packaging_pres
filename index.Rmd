@@ -1,6 +1,6 @@
 ---
 title: "The Promise and Perils of Packaging Your Processes"
-subtitle: "⚔<br/>with xaringan"
+subtitle: "(mostly promise)"
 author: "Karl Hailperin"
 date: "2016/12/12 (updated: `r Sys.Date()`)"
 output:
@@ -16,7 +16,7 @@ output:
 - Data science consultant
 - Have built R packages for a client to streamline data processing and 
 visualization
-- They/them
+- They/them pronouns
 
 ---
 # What this talk is (and isn't) about
@@ -30,6 +30,8 @@ or at work.
 # Why should I bother building a package if no one else is going to use it?
 - `devtools` and `usethis` provide tools for documenting what you were 
 thinking when you wrote the code and what your dependencies are
+- `testthat` makes it easier to build unit tests that will keep you from 
+breaking things (or at least not noticing that you're breaking things)
 - Future you will be grateful
 - Low-stress way to develop related skills
 - Good rule of thumb (that I can't find the source for): If you re-use the same 
@@ -41,7 +43,7 @@ write a package.
 - [For those unfamiliar with the above reference](https://www.youtube.com/watch?v=GyNqlOjhPCQ)
 - Repeating code obscures changes.
 - Repeating code leads to accidental changes.
-- Need to remember to manually propigate changes to all versions.
+- Need to remember to manually propagate changes to all versions.
 
 ---
 # utils.R is your friend (internal functions)
@@ -61,6 +63,19 @@ used.
 
 ---
 # Case study in internal functions and defaults
+- Starting point:
+```{r basic_pseudo_code, eval = FALSE}
+# assorted documentation ommitted
+# usethis::use_pipe() allows us to use %>% 
+#' @export
+read_page_views = here::here("data", "page_views.csv") %>% 
+  readr::read_csv() %>% 
+  # data comes in as UTC
+  dplyr::mutate(time = lubridate::with_tz(time, tz = "America/Chicago"))
+```
+
+---
+
 
 ---
 # Additional resources
