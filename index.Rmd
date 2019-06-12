@@ -87,40 +87,53 @@ read_page_views <- function(){
 
 ---
 # But then we added bunch of other data sources...
+--
+
 - Also, there's discussion of reading directly from AWS.
+--
+
 - Now code looks more like `here::here("data", "web_data","page_views.csv")`.
+--
+
 - So now `read_page_views()` looks more like this:
+--
+
 ```{r use_read_data_file}
 #' @export
 read_page_views <- function(){
-  read_data_file(location = "web_data",
-                 file_name = "page_views.csv") %>% 
+  read_data_file(location = "web_data", #<<
+                 file_name = "page_views.csv") %>% #<<
   # data comes in as UTC
   dplyr::mutate(time = lubridate::with_tz(time, 
                                           tz = "America/Chicago"),
                 page_name = regex_stuff(page_name))
 }
 ```
+--
 
 - `read_data_file` is an internal function that wraps the first two steps
 
 ---
 # That seems overly complicated...
+--
+
 - That's not entirely unfair.
+--
+
 - I may have omitted some code.
+--
+
 - The code looked more like this:
 ```{r location}
 #' @export
 read_page_views <- function(location){
-  data_file <- dplyr::case_when(
-    location == "local" ~ read_data_file(location = "web_data",
-                                         file_name = "page_views.csv"),
-    location == "aws" ~ read_data_file(location = "aws",
-                                         file_name = "page_views.csv"),
-    TRUE ~ stop("Helpful error message")
-  )
-  
-  
+  data_file <- dplyr::case_when( #<<
+    location == "local" ~ read_data_file(location = "web_data", #<<
+                                         file_name = "page_views.csv"), #<<
+    location == "aws" ~ read_data_file(location = "aws", #<<
+                                         file_name = "page_views.csv"), #<<
+    TRUE ~ stop("Helpful error message") #<<
+  ) #<<
   data_file %>% 
   # data comes in as UTC
   dplyr::mutate(time = lubridate::with_tz(time, 
@@ -151,10 +164,19 @@ we add data sources. Just edit the wrapper and write some data-specific unit
 tests.
 
 ---
-# Remember page_name = regex_stuff(page_name)?
+# Remember regex_stuff(page_name)?
+
+--
+
 - Yes...why?
+--
+
 - It turns out it takes *forever* and almost never matters
+--
+
 - Better implementation:
+--
+
 ```{r procces_name}
 #' @export
 read_page_views <- function(location = "local", process_name = FALSE){
@@ -167,14 +189,12 @@ read_page_views <- function(location = "local", process_name = FALSE){
   ) %>% 
     mutate(time = lubridate::with_tz(time, 
                                      tz = "America/Chicago"))
-  
-  if (process_name){
-    dplyr::mutate(data_file, 
-                  page_name = regex_stuff(page_name))
-  } else {
-    return(data_file)
-  }
-  
+  if (process_name){ #<<
+    dplyr::mutate(data_file, #<<
+                  page_name = regex_stuff(page_name)) #<<
+  } else { #<<
+    return(data_file) #<<
+  } #<<
 }
 ```
 

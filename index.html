@@ -4,44 +4,224 @@
     <title>The Promise and Perils of Packaging Your Processes</title>
     <meta charset="utf-8" />
     <meta name="author" content="Karl Hailperin" />
-    <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
 # The Promise and Perils of Packaging Your Processes
-## ⚔<br/>with xaringan
+## (mostly promise)
 ### Karl Hailperin
-### 2016/12/12 (updated: 2019-04-24)
+### 2018/06/18
 
 ---
 
-
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
-
+# Who am I?
 
 
-???
-
-Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
+- Data science consultant
+- Have built R packages for a client to streamline data processing and 
+visualization
+- They/them pronouns
 
 ---
-class: center, middle
+# What this talk is (and isn't) about
+- Not (necessarily) about destined for Github/CRAN
+- Not about how to build packages/intro to `devtools` and `roxygen2` (but there 
+will be resources on that at the end)
+- It's about practices I've found useful in developing packages for personal use 
+or at work.
 
-# Who am I? (might move or drop this slide)
+---
+# Why should I bother building a package if no one else is going to use it?
+- `devtools` and `usethis` provide tools for documenting what you were 
+thinking when you wrote the code and what your dependencies are
+- `testthat` makes it easier to build unit tests that will keep you from 
+breaking things (or at least not noticing that you're breaking things)
+- Future you will be grateful
+- Low-stress way to develop related skills
+- Good rule of thumb (that I can't find the source for): If you re-use the same 
+code three times, write a function. If you re-use the same function three times,
+write a package.
 
-# What this talk is (and isn't about)
-
+---
 # How repeated code is like for loops (and therefore cupcakes)
+- [For those unfamiliar with the above reference](https://www.youtube.com/watch?v=GyNqlOjhPCQ)
+- Repeating code obscures changes.
+- Repeating code leads to accidental changes.
+- Need to remember to manually propagate changes to all versions.
 
+---
 # utils.R is your friend (internal functions)
+- Remember that not everything needs to be `@exported`-ed
+- moving chunks of code into a (well-named) internal function can make it easier
+to review and test your code
+- "Rule of three" applies to code within functions
+- makes it easy to update a common workflow or use a parameter to 'switch' 
+which workflow your using
 
+---
 # Using sensible defaults
+- Use defaults to hide repeated processes that you don't always want to run.
+- For me, this was driven home by a _very_ slow processing step I almost never 
+used.
+- often a simple TRUE/FALSE parameter is enough
 
+---
+# Case study in internal functions and defaults
+- Starting point was something like this:
+
+```r
+# assorted documentation ommitted
+# usethis::use_pipe() allows us to use %&gt;% 
+#' @export
+read_page_views &lt;- function(){
+  here::here("data", "page_views.csv") %&gt;% 
+  readr::read_csv() %&gt;% 
+  # data comes in as UTC
+  dplyr::mutate(time = lubridate::with_tz(time, 
+                                          tz = "America/Chicago"),
+                # some non-standard characters in page names were 
+                # coming out garbled, and needed to be replaced 
+                # for use in plot labels
+                page_name = regex_stuff(page_name))
+}
+```
+
+---
+# But then we added bunch of other data sources...
+--
+
+- Also, there's discussion of reading directly from AWS.
+--
+
+- Now code looks more like `here::here("data", "web_data","page_views.csv")`.
+--
+
+- So now `read_page_views()` looks more like this:
+--
+
+
+```r
+#' @export
+read_page_views &lt;- function(){
+* read_data_file(location = "web_data",
+*                file_name = "page_views.csv") %&gt;%
+  # data comes in as UTC
+  dplyr::mutate(time = lubridate::with_tz(time, 
+                                          tz = "America/Chicago"),
+                page_name = regex_stuff(page_name))
+}
+```
+--
+
+- `read_data_file` is an internal function that wraps the first two steps
+
+---
+# That seems overly complicated...
+--
+
+- That's not entirely unfair.
+--
+
+- I may have omitted some code.
+--
+
+- The code looked more like this:
+
+```r
+#' @export
+read_page_views &lt;- function(location){
+* data_file &lt;- dplyr::case_when(
+*   location == "local" ~ read_data_file(location = "web_data",
+*                                        file_name = "page_views.csv"),
+*   location == "aws" ~ read_data_file(location = "aws",
+*                                        file_name = "page_views.csv"),
+*   TRUE ~ stop("Helpful error message")
+* )
+  data_file %&gt;% 
+  # data comes in as UTC
+  dplyr::mutate(time = lubridate::with_tz(time, 
+                                          tz = "America/Chicago"),
+                page_name = regex_stuff(page_name))
+}
+```
+
+---
+# read_data_file() pseudo-code
+
+```r
+read_data_file &lt;- function(location, file_name){
+  if (location = "aws"){
+    # code to handle reading from AWS
+  } else{
+    here::here("data", location, file_name) %&gt;% 
+      readr::read_csv()
+  }
+}
+```
+- Added bonus: we can give a default value for `location` parameters.
+- Went from `read_page_views &lt;- function(location = "local"){# ...}` to
+`read_page_views &lt;- function(location = "aws"){# ...}` when AWS 
+authorization system was ready.
+- Actual code still just uses `read_page_views()`.
+- Plus, `read_data_file()` makes it easy to create new `read_*()` functions as
+we add data sources. Just edit the wrapper and write some data-specific unit 
+tests.
+
+---
+# Remember regex_stuff(page_name)?
+
+--
+
+- Yes...why?
+--
+
+- It turns out it takes *forever* and almost never matters
+--
+
+- Better implementation:
+--
+
+
+```r
+#' @export
+read_page_views &lt;- function(location = "local", process_name = FALSE){
+  data_file &lt;- dplyr::case_when(
+    location == "local" ~ read_data_file(location = "web_data",
+                                         file_name = "page_views.csv"),
+    location == "aws" ~ read_data_file(location = "aws",
+                                         file_name = "page_views.csv"),
+    TRUE ~ stop("Helpful error message")
+  ) %&gt;% 
+    mutate(time = lubridate::with_tz(time, 
+                                     tz = "America/Chicago"))
+* if (process_name){
+*   dplyr::mutate(data_file,
+*                 page_name = regex_stuff(page_name))
+* } else {
+*   return(data_file)
+* }
+}
+```
+
+---
 # Additional resources
+- [RStudio's cheetsheet](https://github.com/rstudio/cheatsheets/blob/master/package-development.pdf)
+- [_R Packages_ by Hadley Wickham](http://r-pkgs.had.co.nz/)
+- [WIP 2&lt;sup&gt;nd&lt;/sup&gt; edition with Jenny Bryan](https://r-pkgs.org/)
+- ["Writing an R package from scratch" by Hilary 
+Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
+- [Thomas Westlake's version of "Writing an R package from scratch" using 
+`usethis`](https://r-mageddon.netlify.com/post/writing-an-r-package-from-scratch/)
+- ["R Package Primer" by Karl Broman](https://kbroman.org/pkg_primer/)
+- ["`usethis` workflow for package development" by Emil 
+Hvitfedlt](https://www.hvitfeldt.me/blog/usethis-workflow-for-package-development/)
+- [The tidyverse style guide](https://style.tidyverse.org/)
 
+---
 # Thank you/questions
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
