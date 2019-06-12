@@ -1,21 +1,29 @@
 ---
 title: "The Promise and Perils of Packaging Your Processes"
-subtitle: "(mostly promise)"
-author: "Karl Hailperin"
-date: "2018/06/18"
+subtitle: (mostly promise)
+author: 'Karl Hailperin <br> <a href="http://github.com/khailper"><i class="fa fa-github fa-fw"></i>&nbsp; khailper</a><br><a href="http://twitter.com/khailper">'
+date: "2018/06/20"
 output:
   xaringan::moon_reader:
+    css: ["default", "default-fonts", "footer.css"]
     lib_dir: libs
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-
 ---
-# Who am I?
+
+layout: true
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 ```
+
+<div class="my-footer"><span>khailper.github.io/process_packaging_pres</span></div>
+
+<!-- reusing footer code from https://github.com/rstudio-education/arm-workshop-rsc2019/blob/master/static/slides/xaringan.Rmd, https://github.com/rstudio-education/arm-workshop-rsc2019/blob/master/static/slides/css/sfah.css, and https://github.com/yihui/xaringan/wiki/Footer-and-header-lines-->
+
+---
+# Who am I?
 
 - Data science consultant
 - Have built R packages for a client to streamline data processing and 
