@@ -52,6 +52,15 @@ code three times, write a function. If you re-use the same function three times,
 write a package.
 
 ---
+# Also, you might be sharing your processes with your co-workers
+- shared != public
+- It's likely your team is going to run into same problem. An internal package 
+means you only have to solve it once.
+- Code review is quicker when you don't have to double-check the same things
+every time.
+- Using a package of common processes also acts as a style guide.
+
+---
 # How repeated code is like for loops (and therefore cupcakes)
 - [For those unfamiliar with the above reference](https://www.youtube.com/watch?v=GyNqlOjhPCQ)
 - Repeating code obscures changes.
