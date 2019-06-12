@@ -141,11 +141,14 @@ read_data_file <- function(location, file_name){
   }
 }
 ```
-- Added bonus, we can give a default value for `location` parameters.
+- Added bonus: we can give a default value for `location` parameters.
 - Went from `read_page_views <- function(location = "local"){# ...}` to
 `read_page_views <- function(location = "aws"){# ...}` when AWS 
 authorization system was ready.
 - Actual code still just uses `read_page_views()`.
+- Plus, `read_data_file()` makes it easy to create new `read_*()` functions as
+we add data sources. Just edit the wrapper and write some data-specific unit 
+tests.
 
 ---
 # Remember page_name = regex_stuff(page_name)?
