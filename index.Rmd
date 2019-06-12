@@ -1,7 +1,7 @@
 ---
 title: "The Promise and Perils of Packaging Your Processes"
-subtitle: (mostly promise)
-author: 'Karl Hailperin <br> <a href="http://github.com/khailper"><i class="fa fa-github fa-fw"></i>&nbsp; khailper</a><br><a href="http://twitter.com/khailper">'
+subtitle: "(mostly promise)"
+author: 'Karl Hailperin <br> <a href="http://github.com/khailper"><i class="fa fa-github"></i>&nbsp; khailper</a><br> <a href="http://twitter.com/khailper"> <i class="fa fa-twitter"></i> &nbsp; @khailper</a><br>'
 date: "2018/06/20"
 output:
   xaringan::moon_reader:
@@ -19,8 +19,9 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 <div class="my-footer"><span>khailper.github.io/process_packaging_pres</span></div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!-- reusing footer code from https://github.com/rstudio-education/arm-workshop-rsc2019/blob/master/static/slides/xaringan.Rmd, https://github.com/rstudio-education/arm-workshop-rsc2019/blob/master/static/slides/css/sfah.css, and https://github.com/yihui/xaringan/wiki/Footer-and-header-lines-->
+<!-- reusing footer code from https://github.com/rstudio-education/arm-workshop-rsc2019/blob/master/static/slides/xaringan.Rmd, https://github.com/rstudio-education/arm-workshop-rsc2019/blob/master/static/slides/css/sfah.css, and https://github.com/yihui/xaringan/wiki/Footer-and-header-lines stylesheet code from https://holtzy.github.io/Pimp-my-rmd/#footer_and_header-->
 
 ---
 # Who am I?
