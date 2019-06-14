@@ -33,11 +33,12 @@ visualization
 
 ---
 # What this talk is (and isn't) about
+
+- It's about practices I've found useful in developing packages for personal use 
+or at work.
 - Not (necessarily) about destined for Github/CRAN
 - Not about how to build packages/intro to `devtools` and `roxygen2` (but there 
 will be resources on that at the end)
-- It's about practices I've found useful in developing packages for personal use 
-or at work.
 
 ---
 # Why should I bother building a package if no one else is going to use it?
@@ -45,11 +46,12 @@ or at work.
 thinking when you wrote the code and what your dependencies are
 - `testthat` makes it easier to build unit tests that will keep you from 
 breaking things (or at least not noticing that you're breaking things)
-- Future you will be grateful
-- Low-stress way to develop related skills
 - Good rule of thumb (that I can't find the source for): If you re-use the same 
 code three times, write a function. If you re-use the same function three times,
 write a package.
+- Future you will be grateful
+- Low-stress way to develop related skills
+
 
 ---
 # Also, you might be sharing your processes with your co-workers
@@ -71,9 +73,9 @@ every time.
 ---
 # utils.R is your friend (internal functions)
 - Remember that not everything needs to be `@exported`-ed
+- "Rule of three" applies to code within functions
 - moving chunks of code into a (well-named) internal function can make it easier
 to review and test your code
-- "Rule of three" applies to code within functions
 - makes it easy to update a common workflow or use a parameter to 'switch' 
 which workflow your using
 
@@ -106,12 +108,16 @@ read_page_views <- function(){
 
 ---
 # But then we added bunch of other data sources...
---
 
-- Also, there's discussion of reading directly from AWS.
 --
 
 - Now code looks more like `here::here("data", "web_data","page_views.csv")`.
+--
+
+- Those first two steps are repeated a lot across similar functions.
+--
+
+- Also, there's discussion of reading directly from AWS.
 --
 
 - So now `read_page_views()` looks more like this:
@@ -145,7 +151,7 @@ read_page_views <- function(){
 - The code looked more like this:
 ```{r location}
 #' @export
-read_page_views <- function(location){
+read_page_views <- function(location){ #<<
   data_file <- dplyr::case_when( #<<
     location == "local" ~ read_data_file(location = "web_data", #<<
                                          file_name = "page_views.csv"), #<<
