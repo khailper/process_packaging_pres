@@ -204,7 +204,7 @@ tests.
 
 ```{r procces_name}
 #' @export
-read_page_views <- function(location = "local", process_name = FALSE){
+read_page_views <- function(location = "local", process_name = FALSE){ #<<
   data_file <- dplyr::case_when(
     location == "local" ~ read_data_file(location = "web_data",
                                          file_name = "page_views.csv"),
