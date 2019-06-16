@@ -1,7 +1,7 @@
 ---
 title: "The Promise and Perils of Packaging Your Processes"
 subtitle: "(but mostly promise)"
-author: 'Karl Hailperin <br> <a href="http://github.com/khailper"><i class="fa fa-github"></i>&nbsp; khailper</a><br> <a href="http://twitter.com/khailper"> <i class="fa fa-twitter"></i> &nbsp; @khailper</a><br>'
+author: 'Karl Hailperin <br> <a href="http://github.com/khailper"><i class="fa fa-github"></i>&nbsp; khailper</a><br> <a href="http://twitter.com/khailper"> <i class="fa fa-twitter"></i> &nbsp; @khailper</a><br>  <a href="mailto:khailper@gmail.com"> <i class="fa fa-paper-plane fa-fw"></i>&nbsp; khailper@gmail</a><br>'
 date: "2018/06/20"
 output:
   xaringan::moon_reader:
