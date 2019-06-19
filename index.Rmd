@@ -84,6 +84,8 @@ which workflow your using
 - Use defaults to hide repeated processes that you don't always want to run.
 - For me, this was driven home by a _very_ slow processing step I almost never 
 used.
+- You may have steps that happen enough to put in your package, but sometimes 
+it's critical to skip those steps.
 - often a simple TRUE/FALSE parameter is enough
 
 ---
