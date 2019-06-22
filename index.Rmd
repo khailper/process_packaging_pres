@@ -72,8 +72,9 @@ every time.
 
 ---
 # utils.R is your friend (internal functions)
-- (`utils.R` is a personal convention for "that file where I put the functions
-that only exist to be called by other functions".)
+- (`utils.R` is a convention from [Hadley Wickham](http://r-pkgs.had.co.nz/namespace.html) 
+for that file where I put the functions that only exist to be called by other 
+functions.)
 - Remember that not everything needs to be `@exported`-ed
 - "Rule of three" applies to code within functions
 - moving chunks of code into a (well-named) internal function can make it easier
